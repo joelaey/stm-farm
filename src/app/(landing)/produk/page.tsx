@@ -54,7 +54,7 @@ export default function ProdukPage() {
   const { t, locale } = useSettings();
 
   return (
-    <div className="flex flex-col gap-24 pb-24 pt-12">
+    <div className="flex flex-col gap-24 pb-24 pt-32">
       {/* Hero Section */}
       <section className="relative px-4 sm:px-6 lg:px-8 text-center space-y-6">
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[var(--text-primary)]">

@@ -4,7 +4,7 @@ import { SettingsProvider } from '@/contexts/SettingsContext';
 import { DataProvider } from '@/contexts/DataContext';
 
 export const metadata: Metadata = {
-  title: 'STM Farm - Digitalisasi Bisnis Supplier Ubi',
+  title: 'STM Farm',
   description: 'Sistem administrasi dan informasi bisnis supplier ubi terpercaya.',
 };
 
