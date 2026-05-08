@@ -28,15 +28,15 @@ export default function LandingPage() {
                 <Leaf className="w-4 h-4 animate-bounce" />
                 <span>{t.tagline}</span>
               </div>
-              
+
               <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-[var(--text-primary)] leading-[1.1]">
                 {t.landing.heroTitle}
               </h1>
-              
+
               <p className="text-xl md:text-2xl text-[var(--text-secondary)] leading-relaxed max-w-lg">
                 {t.landing.heroSubtitle}
               </p>
-              
+
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
                 <Button size="lg" className="w-full sm:w-auto text-lg px-8 h-14 rounded-full gap-2 shadow-xl shadow-[var(--primary)]/20 hover:scale-110 hover:shadow-2xl transition-all duration-300">
                   {t.landing.heroCta}
@@ -53,10 +53,10 @@ export default function LandingPage() {
 
             {/* Hero Image */}
             <div className="relative h-[400px] lg:h-[600px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl animate-float group">
-              <Image 
-                src="/images/farm.png" 
-                alt="STM Farm Field" 
-                fill 
+              <Image
+                src="/images/farm.png"
+                alt="STM Farm Field"
+                fill
                 className="object-cover group-hover:scale-110 transition-transform duration-1000"
                 priority
               />
@@ -64,11 +64,11 @@ export default function LandingPage() {
               <div className="absolute bottom-8 left-8 right-8 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                 <div className="flex gap-4">
                   <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30 hover:bg-white/30 transition-colors">
-                    <div className="text-3xl font-bold">15+</div>
+                    <div className="text-3xl font-bold">2+</div>
                     <div className="text-sm font-medium text-white/80">{t.landing.statsYears}</div>
                   </div>
                   <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30 hover:bg-white/30 transition-colors">
-                    <div className="text-3xl font-bold">500+</div>
+                    <div className="text-3xl font-bold">50+</div>
                     <div className="text-sm font-medium text-white/80">{t.landing.statsPartners}</div>
                   </div>
                 </div>
@@ -109,11 +109,11 @@ export default function LandingPage() {
               <CardContent className="p-8 md:p-10 space-y-6 relative overflow-hidden h-full">
                 {/* Decorative blob corner */}
                 <div className={`absolute -top-16 -right-16 w-40 h-40 ${service.bg} opacity-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`}></div>
-                
+
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${service.bg} group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 relative z-10 shadow-inner`}>
                   <service.icon className={`w-8 h-8 ${service.color}`} />
                 </div>
-                
+
                 <div className="relative z-10 space-y-3">
                   <h3 className="text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--primary)] transition-colors">{service.title}</h3>
                   <p className="text-[var(--text-secondary)] leading-relaxed">{service.desc}</p>
@@ -133,8 +133,8 @@ export default function LandingPage() {
                 {locale === 'id' ? 'Produk Pilihan Kami' : 'Our Featured Products'}
               </h2>
               <p className="text-lg text-[var(--text-secondary)]">
-                {locale === 'id' 
-                  ? 'Kualitas terbaik langsung dari kebun, diproses dengan standar tinggi untuk kepuasan Anda.' 
+                {locale === 'id'
+                  ? 'Kualitas terbaik langsung dari kebun, diproses dengan standar tinggi untuk kepuasan Anda.'
                   : 'Best quality straight from the farm, processed with high standards for your satisfaction.'}
               </p>
             </div>
@@ -189,12 +189,12 @@ export default function LandingPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary)]/80 via-transparent to-transparent opacity-60"></div>
             </div>
-            
+
             {/* Floating Glassmorphism Card 1 */}
             <div className="absolute -bottom-8 -right-4 md:-right-8 bg-white/70 dark:bg-black/60 backdrop-blur-xl border border-white/20 dark:border-white/10 p-6 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] max-w-[240px] animate-float">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 bg-[var(--accent)] rounded-2xl flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shrink-0">
-                  15+
+                  2+
                 </div>
                 <div>
                   <h4 className="text-[var(--text-primary)] font-bold leading-tight">{locale === 'id' ? 'Tahun Pengalaman' : 'Years Experience'}</h4>
@@ -202,7 +202,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Secondary Floating Card */}
             <div className="absolute top-12 -left-4 md:-left-8 bg-white/70 dark:bg-black/60 backdrop-blur-xl border border-white/20 dark:border-white/10 p-6 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] max-w-[240px] animate-float [animation-delay:2s]">
               <div className="flex items-center gap-4">
@@ -223,22 +223,22 @@ export default function LandingPage() {
               <Users className="w-4 h-4" />
               {locale === 'id' ? 'Mengenal Kami Lebih Dekat' : 'Getting to Know Us'}
             </div>
-            
+
             <h2 className="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] leading-tight">
               {t.landing.aboutTitle}
             </h2>
-            
+
             <div className="space-y-6 text-lg text-[var(--text-secondary)] leading-relaxed">
               <p>
                 {t.landing.aboutDesc}
               </p>
               <p className="font-medium text-[var(--text-primary)] border-l-4 border-[var(--primary)] pl-6 py-2 italic bg-[var(--bg-tertiary)] rounded-r-2xl">
-                {locale === 'id' 
-                  ? '"Berdiri sejak tahun 2010, STM Farm bermula dari lahan kecil yang kini berkembang menjadi pemasok ubi terpercaya. Kualitas adalah prioritas utama kami."' 
-                  : '"Established in 2010, STM Farm started from a small land and has grown into a trusted sweet potato supplier. Quality is our main priority."'}
+                {locale === 'id'
+                  ? '"Berdiri sejak tahun 2024, STM Farm bermula dari lahan kecil yang kini berkembang menjadi pemasok ubi terpercaya. Kualitas adalah prioritas utama kami."'
+                  : '"Established in 2024, STM Farm started from a small land and has grown into a trusted sweet potato supplier. Quality is our main priority."'}
               </p>
             </div>
-            
+
             <div className="grid sm:grid-cols-2 gap-x-6 gap-y-8 pt-6">
               {[
                 { icon: Leaf, title: locale === 'id' ? 'Ramah Lingkungan' : 'Eco-Friendly', desc: locale === 'id' ? 'Praktik pertanian yang menjaga kelestarian alam.' : 'Farming practices that preserve nature.' },
@@ -276,7 +276,7 @@ export default function LandingPage() {
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] group-hover:h-3 transition-all duration-300"></div>
           <div className="absolute -left-32 -top-32 w-64 h-64 bg-[var(--primary)]/10 rounded-full blur-[80px] group-hover:scale-150 transition-transform duration-1000"></div>
           <div className="absolute -right-32 -bottom-32 w-64 h-64 bg-[var(--accent)]/10 rounded-full blur-[80px] group-hover:scale-150 transition-transform duration-1000"></div>
-          
+
           <h2 className="text-4xl md:text-6xl font-extrabold text-[var(--text-primary)] relative z-10 group-hover:scale-105 transition-transform duration-500">{t.landing.ctaTitle}</h2>
           <p className="text-xl md:text-2xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed relative z-10">{t.landing.ctaDesc}</p>
           <Button size="lg" className="h-16 px-10 text-xl rounded-full shadow-2xl hover:scale-110 hover:shadow-[0_0_40px_rgba(22,101,52,0.4)] transition-all duration-300 gap-3 relative z-10" onClick={() => window.open('https://wa.me/6281234567890', '_blank')}>
