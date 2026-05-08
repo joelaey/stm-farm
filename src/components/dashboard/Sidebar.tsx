@@ -44,7 +44,6 @@ export function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
     { name: t.dash.operational, href: '/operasional', icon: ClipboardList },
     { name: t.dash.expenses, href: '/pengeluaran', icon: Receipt },
     { name: 'Manajemen User', href: '/users', icon: Users },
-    { name: t.dash.settings, href: '/pengaturan', icon: Settings },
   ];
 
   const pekerjaNavigation = [
