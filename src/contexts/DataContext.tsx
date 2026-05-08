@@ -239,7 +239,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
               </button>
               <button 
                 onClick={confirmState.onConfirm}
-                className={`px-4 py-2 text-white rounded-lg text-sm transition-all font-medium shadow-sm hover:shadow-md hover:brightness-90 ${confirmState.message.includes('menghapus') ? 'bg-red-600' : 'bg-[var(--primary)]'}`}
+                className={`px-4 py-2 text-white rounded-lg text-sm transition-all font-medium shadow-sm hover:shadow-md ${confirmState.message.includes('menghapus') ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
               >
                 Ya, Lanjutkan
               </button>
