@@ -83,19 +83,10 @@ export default function ProdukPage() {
               <CardContent className="p-8 space-y-4">
                 <div className="flex justify-between items-start gap-4">
                   <h2 className="text-2xl font-bold text-[var(--text-primary)]">{product.name[locale]}</h2>
-                  <span className="inline-block px-3 py-1 bg-[var(--primary-light)] text-[var(--primary)] text-sm font-semibold rounded-full whitespace-nowrap">
-                    {product.price}
-                  </span>
                 </div>
                 <p className="text-[var(--text-secondary)] leading-relaxed text-lg">
                   {product.desc[locale]}
                 </p>
-                <div className="pt-4">
-                  <Button className="w-full sm:w-auto rounded-full gap-2 hover:scale-105 transition-transform" size="lg" onClick={() => window.open('https://wa.me/6281234567890', '_blank')}>
-                    <ShoppingCart className="w-5 h-5" />
-                    {locale === 'id' ? 'Pesan Sekarang' : 'Order Now'}
-                  </Button>
-                </div>
               </CardContent>
             </Card>
           ))}
