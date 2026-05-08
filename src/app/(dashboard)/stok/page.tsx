@@ -13,32 +13,29 @@ import EntryFormModal from '@/components/dashboard/EntryFormModal';
 
 export default function StokPage() {
   const { t, theme } = useSettings();
-  const { stokEntries, stokSummary, addStok, deleteStok, recomputeStok } = useData();
+  const { stokEntries, stokSummary, addStok, updateStok, deleteStok, recomputeStok } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingData, setEditingData] = useState<any>(null);
 
-  const handleSave = (data: {
-    bulan: string;
-    tanggalNum: number;
-    keterangan: string;
-    items: StokEntry['items'];
-    jumlah: number;
-    debit: number;
-    kredit: number;
-    tanggal: string;
-  }) => {
-    addStok({
-      id: generateId(),
-      tanggal: data.tanggal,
-      bulan: data.bulan,
-      tanggalNum: data.tanggalNum,
-      keterangan: data.keterangan,
-      items: data.items,
-      jumlah: data.jumlah,
-      debit: data.debit,
-      kredit: data.kredit,
-      isManualOverride: true,
-      createdAt: new Date().toISOString()
-    });
+  const handleSave = (data: any) => {
+    if (editingData) {
+      updateStok(editingData.id, data);
+    } else {
+      addStok({
+        id: generateId(),
+        tanggal: data.tanggal,
+        bulan: data.bulan,
+        tanggalNum: data.tanggalNum,
+        keterangan: data.keterangan,
+        items: data.items,
+        jumlah: data.jumlah,
+        debit: data.debit,
+        kredit: data.kredit,
+        isManualOverride: false,
+        createdAt: new Date().toISOString()
+      });
+    }
+    setEditingData(null);
   };
 
   const handleExportCSV = () => {
@@ -125,16 +122,26 @@ export default function StokPage() {
         entries={stokEntries}
         categoryLabels={UBI_LABELS_STOK}
         onDelete={deleteStok}
+        onEdit={(entry) => {
+          setEditingData(entry);
+          setIsModalOpen(true);
+        }}
         title="Stok"
       />
 
-      <EntryFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSave}
-        title="Tambah Stok Manual"
-        categoryLabels={UBI_LABELS_STOK}
-      />
+      {(isModalOpen || editingData) && (
+        <EntryFormModal
+          isOpen={isModalOpen || !!editingData}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingData(null);
+          }}
+          onSave={handleSave}
+          title={editingData ? "Edit Stok" : "Tambah Stok Manual"}
+          categoryLabels={UBI_LABELS_STOK}
+          initialData={editingData}
+        />
+      )}
     </div>
   );
 }

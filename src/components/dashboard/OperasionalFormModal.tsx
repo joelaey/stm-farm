@@ -18,6 +18,7 @@ interface OperasionalFormModalProps {
     jumlah: number;
     tanggal: string;
   }) => void;
+  initialData?: any;
 }
 
 const BULAN_OPTIONS = [
@@ -25,11 +26,27 @@ const BULAN_OPTIONS = [
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ];
 
-export default function OperasionalFormModal({ isOpen, onClose, onSave }: OperasionalFormModalProps) {
+export default function OperasionalFormModal({ isOpen, onClose, onSave, initialData }: OperasionalFormModalProps) {
   const [bulan, setBulan] = useState(BULAN_OPTIONS[new Date().getMonth()]);
   const [tanggalNum, setTanggalNum] = useState(new Date().getDate());
   const [keterangan, setKeterangan] = useState('');
   const [items, setItems] = useState<Record<OperasionalCategory, number>>(createEmptyOperasionalItems());
+
+  React.useEffect(() => {
+    if (isOpen) {
+      if (initialData) {
+        setBulan(initialData.bulan);
+        setTanggalNum(initialData.tanggalNum);
+        setKeterangan(initialData.keterangan);
+        setItems(initialData.items || createEmptyOperasionalItems());
+      } else {
+        setBulan(BULAN_OPTIONS[new Date().getMonth()]);
+        setTanggalNum(new Date().getDate());
+        setKeterangan('');
+        setItems(createEmptyOperasionalItems());
+      }
+    }
+  }, [isOpen, initialData]);
 
   const jumlah = useMemo(() => calculateOperasionalJumlah(items), [items]);
 

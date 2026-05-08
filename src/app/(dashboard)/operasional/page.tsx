@@ -12,27 +12,26 @@ import OperasionalFormModal from '@/components/dashboard/OperasionalFormModal';
 
 export default function OperasionalPage() {
   const { t } = useSettings();
-  const { operasional, addOperasional, deleteOperasional } = useData();
+  const { operasional, addOperasional, updateOperasional, deleteOperasional } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingData, setEditingData] = useState<any>(null);
 
-  const handleSave = (data: {
-    bulan: string;
-    tanggalNum: number;
-    keterangan: string;
-    items: Record<OperasionalCategory, number>;
-    jumlah: number;
-    tanggal: string;
-  }) => {
-    addOperasional({
-      id: generateId(),
-      tanggal: data.tanggal,
-      bulan: data.bulan,
-      tanggalNum: data.tanggalNum,
-      keterangan: data.keterangan,
-      items: data.items,
-      jumlah: data.jumlah,
-      createdAt: new Date().toISOString()
-    });
+  const handleSave = (data: any) => {
+    if (editingData) {
+      updateOperasional(editingData.id, data);
+    } else {
+      addOperasional({
+        id: generateId(),
+        tanggal: data.tanggal,
+        bulan: data.bulan,
+        tanggalNum: data.tanggalNum,
+        keterangan: data.keterangan,
+        items: data.items,
+        jumlah: data.jumlah,
+        createdAt: new Date().toISOString()
+      });
+    }
+    setEditingData(null);
   };
 
   const handleExportCSV = () => {
@@ -84,13 +83,23 @@ export default function OperasionalPage() {
       <OperasionalTable
         entries={operasional}
         onDelete={deleteOperasional}
+        onEdit={(entry) => {
+          setEditingData(entry);
+          setIsModalOpen(true);
+        }}
       />
 
-      <OperasionalFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSave}
-      />
+      {(isModalOpen || editingData) && (
+        <OperasionalFormModal
+          isOpen={isModalOpen || !!editingData}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingData(null);
+          }}
+          onSave={handleSave}
+          initialData={editingData}
+        />
+      )}
     </div>
   );
 }

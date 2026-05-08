@@ -24,6 +24,7 @@ interface EntryFormModalProps {
   title: string;
   categoryLabels: Record<UbiCategory, string>;
   showNomorNota?: boolean;
+  initialData?: any;
 }
 
 const BULAN_OPTIONS = [
@@ -31,7 +32,7 @@ const BULAN_OPTIONS = [
   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
 ];
 
-export default function EntryFormModal({ isOpen, onClose, onSave, title, categoryLabels, showNomorNota = false }: EntryFormModalProps) {
+export default function EntryFormModal({ isOpen, onClose, onSave, title, categoryLabels, showNomorNota = false, initialData }: EntryFormModalProps) {
   const [bulan, setBulan] = useState(BULAN_OPTIONS[new Date().getMonth()]);
   const [tanggalNum, setTanggalNum] = useState(new Date().getDate());
   const [keterangan, setKeterangan] = useState('');
@@ -39,6 +40,28 @@ export default function EntryFormModal({ isOpen, onClose, onSave, title, categor
   const [items, setItems] = useState<Record<UbiCategory, UbiCategoryData>>(createEmptyItems());
   const [debit, setDebit] = useState(0);
   const [kredit, setKredit] = useState(0);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      if (initialData) {
+        setBulan(initialData.bulan);
+        setTanggalNum(initialData.tanggalNum);
+        setKeterangan(initialData.keterangan);
+        setNomorNota(initialData.nomorNota || '');
+        setItems(initialData.items || createEmptyItems());
+        setDebit(initialData.debit);
+        setKredit(initialData.kredit);
+      } else {
+        setBulan(BULAN_OPTIONS[new Date().getMonth()]);
+        setTanggalNum(new Date().getDate());
+        setKeterangan('');
+        setNomorNota('');
+        setItems(createEmptyItems());
+        setDebit(0);
+        setKredit(0);
+      }
+    }
+  }, [isOpen, initialData]);
 
   const jumlah = useMemo(() => calculateJumlah(items), [items]);
 

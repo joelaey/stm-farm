@@ -12,8 +12,9 @@ import EntryFormModal from '@/components/dashboard/EntryFormModal';
 
 export default function PembelianPage() {
   const { t } = useSettings();
-  const { pembelian, addPembelian, deletePembelian } = useData();
+  const { pembelian, addPembelian, updatePembelian, deletePembelian } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingData, setEditingData] = useState<PembelianEntry | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [role, setRole] = useState<string | null>(null);
 
@@ -25,30 +26,25 @@ export default function PembelianPage() {
     p.keterangan.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleSave = (data: {
-    bulan: string;
-    tanggalNum: number;
-    keterangan: string;
-    nomorNota?: string;
-    items: PembelianEntry['items'];
-    jumlah: number;
-    debit: number;
-    kredit: number;
-    tanggal: string;
-  }) => {
-    addPembelian({
-      id: generateId(),
-      tanggal: data.tanggal,
-      bulan: data.bulan,
-      tanggalNum: data.tanggalNum,
-      keterangan: data.keterangan,
-      nomorNota: data.nomorNota,
-      items: data.items,
-      jumlah: data.jumlah,
-      debit: data.debit,
-      kredit: data.kredit,
-      createdAt: new Date().toISOString()
-    });
+  const handleSave = (data: any) => {
+    if (editingData) {
+      updatePembelian(editingData.id, data);
+    } else {
+      addPembelian({
+        id: generateId(),
+        tanggal: data.tanggal,
+        bulan: data.bulan,
+        tanggalNum: data.tanggalNum,
+        keterangan: data.keterangan,
+        nomorNota: data.nomorNota,
+        items: data.items,
+        jumlah: data.jumlah,
+        debit: data.debit,
+        kredit: data.kredit,
+        createdAt: new Date().toISOString()
+      });
+    }
+    setEditingData(null);
   };
 
   const handleExportCSV = () => {
@@ -163,20 +159,30 @@ export default function PembelianPage() {
             entries={filteredPembelian}
             categoryLabels={UBI_LABELS_PEMBELIAN}
             onDelete={deletePembelian}
+            onEdit={(entry) => {
+              setEditingData(entry);
+              setIsModalOpen(true);
+            }}
             title="Pembelian"
             showNomorNota
           />
         </>
       )}
 
-      <EntryFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSave}
-        title={t.dash.addPurchase}
-        categoryLabels={UBI_LABELS_PEMBELIAN}
-        showNomorNota
-      />
+      {(isModalOpen || editingData) && (
+        <EntryFormModal
+          isOpen={isModalOpen || !!editingData}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingData(null);
+          }}
+          onSave={handleSave}
+          title={editingData ? "Edit Pembelian" : t.dash.addPurchase}
+          categoryLabels={UBI_LABELS_PEMBELIAN}
+          showNomorNota
+          initialData={editingData}
+        />
+      )}
     </div>
   );
 }

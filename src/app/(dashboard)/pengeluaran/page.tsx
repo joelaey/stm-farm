@@ -11,25 +11,25 @@ import PengeluaranFormModal from '@/components/dashboard/PengeluaranFormModal';
 
 export default function PengeluaranPage() {
   const { t } = useSettings();
-  const { pengeluaran, addPengeluaran, deletePengeluaran } = useData();
+  const { pengeluaran, addPengeluaran, updatePengeluaran, deletePengeluaran } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingData, setEditingData] = useState<any>(null);
 
-  const handleSave = (data: {
-    keterangan: string;
-    uraian?: string;
-    harga?: number;
-    jumlah: number;
-    tanggal?: string;
-  }) => {
-    addPengeluaran({
-      id: generateId(),
-      tanggal: data.tanggal || new Date().toISOString(),
-      keterangan: data.keterangan,
-      uraian: data.uraian,
-      harga: data.harga,
-      jumlah: data.jumlah,
-      createdAt: new Date().toISOString()
-    });
+  const handleSave = (data: any) => {
+    if (editingData) {
+      updatePengeluaran(editingData.id, data);
+    } else {
+      addPengeluaran({
+        id: generateId(),
+        tanggal: data.tanggal || new Date().toISOString(),
+        keterangan: data.keterangan,
+        uraian: data.uraian,
+        harga: data.harga,
+        jumlah: data.jumlah,
+        createdAt: new Date().toISOString()
+      });
+    }
+    setEditingData(null);
   };
 
   const handleExportCSV = () => {
@@ -78,13 +78,23 @@ export default function PengeluaranPage() {
       <PengeluaranTable
         entries={pengeluaran}
         onDelete={deletePengeluaran}
+        onEdit={(entry) => {
+          setEditingData(entry);
+          setIsModalOpen(true);
+        }}
       />
 
-      <PengeluaranFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSave}
-      />
+      {(isModalOpen || editingData) && (
+        <PengeluaranFormModal
+          isOpen={isModalOpen || !!editingData}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingData(null);
+          }}
+          onSave={handleSave}
+          initialData={editingData}
+        />
+      )}
     </div>
   );
 }

@@ -13,38 +13,34 @@ import EntryFormModal from '@/components/dashboard/EntryFormModal';
 
 export default function PenjualanPage() {
   const { t } = useSettings();
-  const { penjualan, addPenjualan, deletePenjualan } = useData();
+  const { penjualan, addPenjualan, updatePenjualan, deletePenjualan } = useData();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingData, setEditingData] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredPenjualan = penjualan.filter(p => 
     p.keterangan.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleSave = (data: {
-    bulan: string;
-    tanggalNum: number;
-    keterangan: string;
-    nomorNota?: string;
-    items: PenjualanEntry['items'];
-    jumlah: number;
-    debit: number;
-    kredit: number;
-    tanggal: string;
-  }) => {
-    addPenjualan({
-      id: generateId(),
-      tanggal: data.tanggal,
-      bulan: data.bulan,
-      tanggalNum: data.tanggalNum,
-      keterangan: data.keterangan,
-      nomorNota: data.nomorNota,
-      items: data.items,
-      jumlah: data.jumlah,
-      debit: data.debit,
-      kredit: data.kredit,
-      createdAt: new Date().toISOString()
-    });
+  const handleSave = (data: any) => {
+    if (editingData) {
+      updatePenjualan(editingData.id, data);
+    } else {
+      addPenjualan({
+        id: generateId(),
+        tanggal: data.tanggal,
+        bulan: data.bulan,
+        tanggalNum: data.tanggalNum,
+        keterangan: data.keterangan,
+        nomorNota: data.nomorNota,
+        items: data.items,
+        jumlah: data.jumlah,
+        debit: data.debit,
+        kredit: data.kredit,
+        createdAt: new Date().toISOString()
+      });
+    }
+    setEditingData(null);
   };
 
   const handleExportCSV = () => {
@@ -109,22 +105,34 @@ export default function PenjualanPage() {
         </div>
       </div>
 
-      <SpreadsheetTable
-        entries={filteredPenjualan}
-        categoryLabels={UBI_LABELS_PENJUALAN}
-        onDelete={deletePenjualan}
-        title="Penjualan"
-        showNomorNota
-      />
+      <div className="bg-[var(--bg-secondary)] border border-[var(--border-light)] rounded-2xl p-4 sm:p-6 shadow-sm overflow-x-auto overflow-y-hidden mt-6">
+        <SpreadsheetTable
+          entries={filteredPenjualan}
+          categoryLabels={UBI_LABELS_PENJUALAN}
+          onDelete={deletePenjualan}
+          onEdit={(entry) => {
+            setEditingData(entry);
+            setIsModalOpen(true);
+          }}
+          title="Penjualan"
+          showNomorNota
+        />
+      </div>
 
-      <EntryFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSave}
-        title={t.dash.addSale}
-        categoryLabels={UBI_LABELS_PENJUALAN}
-        showNomorNota
-      />
+      {(isModalOpen || editingData) && (
+        <EntryFormModal
+          isOpen={isModalOpen || !!editingData}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingData(null);
+          }}
+          onSave={handleSave}
+          title={editingData ? "Edit Penjualan" : t.dash.addSale}
+          categoryLabels={UBI_LABELS_PENJUALAN}
+          showNomorNota
+          initialData={editingData}
+        />
+      )}
     </div>
   );
 }

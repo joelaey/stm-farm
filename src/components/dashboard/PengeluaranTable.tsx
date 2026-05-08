@@ -8,9 +8,10 @@ import { Trash2 } from 'lucide-react';
 interface PengeluaranTableProps {
   entries: PengeluaranEntry[];
   onDelete?: (id: string) => void;
+  onEdit?: (entry: PengeluaranEntry) => void;
 }
 
-export default function PengeluaranTable({ entries, onDelete }: PengeluaranTableProps) {
+export default function PengeluaranTable({ entries, onDelete, onEdit }: PengeluaranTableProps) {
   // Calculate totals
   const totals = useMemo(() => {
     let totalJumlah = 0;
@@ -55,18 +56,25 @@ export default function PengeluaranTable({ entries, onDelete }: PengeluaranTable
               <td className="cell-jumlah text-right font-medium">
                 {formatRupiah(entry.jumlah)}
               </td>
-              {onDelete && (
-                <td className="cell-action">
-                  <button onClick={() => onDelete(entry.id)} title="Hapus">
-                    <Trash2 className="h-3.5 w-3.5 text-[var(--danger)]" />
-                  </button>
+              {(onDelete || onEdit) && (
+                <td className="cell-action flex gap-2 justify-center items-center h-full pt-2">
+                  {onEdit && (
+                    <button onClick={() => onEdit(entry)} title="Edit">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--primary)] hover:scale-110 transition-transform"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                    </button>
+                  )}
+                  {onDelete && (
+                    <button onClick={() => onDelete(entry.id)} title="Hapus">
+                      <Trash2 className="h-3.5 w-3.5 text-[var(--danger)] hover:scale-110 transition-transform" />
+                    </button>
+                  )}
                 </td>
               )}
             </tr>
           ))}
           {entries.length === 0 && (
             <tr>
-              <td colSpan={onDelete ? 6 : 5} className="text-center" style={{ padding: '24px', color: 'var(--text-secondary)' }}>
+              <td colSpan={(onDelete || onEdit) ? 6 : 5} className="text-center" style={{ padding: '24px', color: 'var(--text-secondary)' }}>
                 Belum ada data
               </td>
             </tr>
@@ -76,7 +84,7 @@ export default function PengeluaranTable({ entries, onDelete }: PengeluaranTable
           <tr>
             <td colSpan={4} className="total-label">Total</td>
             <td className="cell-jumlah text-right font-bold text-[var(--primary)]">{formatRupiah(totals.totalJumlah)}</td>
-            {onDelete && <td></td>}
+            {(onDelete || onEdit) && <td></td>}
           </tr>
         </tfoot>
       </table>

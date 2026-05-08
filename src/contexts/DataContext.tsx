@@ -32,8 +32,10 @@ interface DataContextType {
   deleteStok: (id: string) => void;
   recomputeStok: () => void;
   addOperasional: (data: OperasionalEntry) => void;
+  updateOperasional: (id: string, data: Partial<OperasionalEntry>) => void;
   deleteOperasional: (id: string) => void;
   addPengeluaran: (data: PengeluaranEntry) => void;
+  updatePengeluaran: (id: string, data: Partial<PengeluaranEntry>) => void;
   deletePengeluaran: (id: string) => void;
 }
 
@@ -160,33 +162,54 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const withConfirm = async (action: 'add' | 'delete', fn: () => Promise<any>) => {
-    const message = action === 'add' 
-      ? 'Apakah Anda yakin ingin menyimpan data ini?' 
-      : 'Apakah Anda yakin ingin menghapus data ini? Aksi ini tidak dapat dibatalkan.';
-    
-    if (window.confirm(message)) {
-      await fn();
-    }
+  const withConfirm = (action: 'add' | 'delete' | 'edit', fn: () => Promise<any>) => {
+    const message = action === 'delete' 
+      ? 'Apakah Anda yakin ingin menghapus data ini? Aksi ini tidak dapat dibatalkan.' 
+      : action === 'edit' ? 'Apakah Anda yakin ingin menyimpan perubahan data ini?' : 'Apakah Anda yakin ingin menyimpan data baru ini?';
+
+    toast((t) => (
+      <div className="flex flex-col gap-3 min-w-[250px]">
+        <p className="font-medium text-slate-800 dark:text-slate-100 leading-snug">{message}</p>
+        <div className="flex gap-2 justify-end mt-2">
+          <button 
+            onClick={() => toast.dismiss(t.id)} 
+            className="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-lg text-sm transition-colors text-slate-800 dark:text-slate-200 font-medium"
+          >
+            Batal
+          </button>
+          <button 
+            onClick={() => {
+              toast.dismiss(t.id);
+              fn();
+            }} 
+            className={`px-4 py-1.5 text-white rounded-lg text-sm transition-colors font-medium shadow-sm ${action === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-[var(--primary)] hover:brightness-90'}`}
+          >
+            Ya, Lanjutkan
+          </button>
+        </div>
+      </div>
+    ), { duration: Infinity, position: 'top-center' });
   };
 
   // CRUD wrappers
   const addPembelian = (data: PembelianEntry) => withConfirm('add', () => apiCall('/api/pembelian', 'POST', data, 'Pembelian berhasil ditambahkan!'));
-  const updatePembelian = (id: string, data: Partial<PembelianEntry>) => {}; // not fully implemented on backend yet
+  const updatePembelian = (id: string, data: Partial<PembelianEntry>) => withConfirm('edit', () => apiCall(`/api/pembelian/${id}`, 'PATCH', data, 'Pembelian berhasil diperbarui!'));
   const deletePembelian = (id: string) => withConfirm('delete', () => apiCall(`/api/pembelian/${id}`, 'DELETE', undefined, 'Pembelian berhasil dihapus!'));
   
   const addPenjualan = (data: PenjualanEntry) => withConfirm('add', () => apiCall('/api/penjualan', 'POST', data, 'Penjualan berhasil ditambahkan!'));
-  const updatePenjualan = (id: string, data: Partial<PenjualanEntry>) => {}; 
+  const updatePenjualan = (id: string, data: Partial<PenjualanEntry>) => withConfirm('edit', () => apiCall(`/api/penjualan/${id}`, 'PATCH', data, 'Penjualan berhasil diperbarui!'));
   const deletePenjualan = (id: string) => withConfirm('delete', () => apiCall(`/api/penjualan/${id}`, 'DELETE', undefined, 'Penjualan berhasil dihapus!'));
   
   const addStok = (data: StokEntry) => withConfirm('add', () => apiCall('/api/stok', 'POST', data, 'Stok berhasil ditambahkan!'));
-  const updateStok = (id: string, data: Partial<StokEntry>) => {}; 
+  const updateStok = (id: string, data: Partial<StokEntry>) => withConfirm('edit', () => apiCall(`/api/stok/${id}`, 'PATCH', data, 'Stok berhasil diperbarui!'));
   const deleteStok = (id: string) => withConfirm('delete', () => apiCall(`/api/stok/${id}`, 'DELETE', undefined, 'Stok berhasil dihapus!'));
   
   const addOperasional = (data: OperasionalEntry) => withConfirm('add', () => apiCall('/api/operasional', 'POST', data, 'Data operasional ditambahkan!'));
+  const updateOperasional = (id: string, data: Partial<OperasionalEntry>) => withConfirm('edit', () => apiCall(`/api/operasional/${id}`, 'PATCH', data, 'Data operasional diperbarui!'));
   const deleteOperasional = (id: string) => withConfirm('delete', () => apiCall(`/api/operasional/${id}`, 'DELETE', undefined, 'Data operasional dihapus!'));
   
   const addPengeluaran = (data: PengeluaranEntry) => withConfirm('add', () => apiCall('/api/pengeluaran', 'POST', data, 'Pengeluaran lainnya ditambahkan!'));
+  const updatePengeluaran = (id: string, data: Partial<PengeluaranEntry>) => withConfirm('edit', () => apiCall(`/api/pengeluaran/${id}`, 'PATCH', data, 'Pengeluaran diperbarui!'));
   const deletePengeluaran = (id: string) => withConfirm('delete', () => apiCall(`/api/pengeluaran/${id}`, 'DELETE', undefined, 'Pengeluaran lainnya dihapus!'));
 
   return (
@@ -196,8 +219,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       refreshData, addPembelian, updatePembelian, deletePembelian,
       addPenjualan, updatePenjualan, deletePenjualan,
       addStok, updateStok, deleteStok, recomputeStok,
-      addOperasional, deleteOperasional,
-      addPengeluaran, deletePengeluaran
+      addOperasional, updateOperasional, deleteOperasional,
+      addPengeluaran, updatePengeluaran, deletePengeluaran
     }}>
       {children}
     </DataContext.Provider>

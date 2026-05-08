@@ -15,14 +15,33 @@ interface PengeluaranFormModalProps {
     jumlah: number;
     tanggal?: string;
   }) => void;
+  initialData?: any;
 }
 
-export default function PengeluaranFormModal({ isOpen, onClose, onSave }: PengeluaranFormModalProps) {
+export default function PengeluaranFormModal({ isOpen, onClose, onSave, initialData }: PengeluaranFormModalProps) {
   const [tanggal, setTanggal] = useState(new Date().toISOString().split('T')[0]);
   const [keterangan, setKeterangan] = useState('');
   const [uraian, setUraian] = useState('');
   const [harga, setHarga] = useState<number | ''>('');
   const [jumlah, setJumlah] = useState<number | ''>('');
+
+  React.useEffect(() => {
+    if (isOpen) {
+      if (initialData) {
+        setTanggal(initialData.tanggal ? initialData.tanggal.split('T')[0] : new Date().toISOString().split('T')[0]);
+        setKeterangan(initialData.keterangan);
+        setUraian(initialData.uraian || '');
+        setHarga(initialData.harga || '');
+        setJumlah(initialData.jumlah || '');
+      } else {
+        setTanggal(new Date().toISOString().split('T')[0]);
+        setKeterangan('');
+        setUraian('');
+        setHarga('');
+        setJumlah('');
+      }
+    }
+  }, [isOpen, initialData]);
 
   const handleSave = () => {
     if (!keterangan.trim()) {
