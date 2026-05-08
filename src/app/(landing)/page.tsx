@@ -159,28 +159,94 @@ export default function LandingPage() {
 
       {/* About Section */}
       <section id="tentang" className="container scroll-mt-32">
-        <div className="bg-[var(--primary)] rounded-[3rem] overflow-hidden shadow-2xl relative group hover:shadow-[0_20px_50px_rgba(22,101,52,0.3)] transition-all duration-700">
-          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
-          <div className="grid md:grid-cols-2 items-center relative z-10">
-            <div className="p-12 md:p-16 lg:p-24 space-y-8 text-white">
-              <h2 className="text-4xl md:text-5xl font-extrabold group-hover:translate-x-2 transition-transform duration-500">{t.landing.aboutTitle}</h2>
-              <p className="text-white/90 text-xl leading-relaxed font-light">{t.landing.aboutDesc}</p>
-              <div className="pt-4">
-                <Link href="#kontak">
-                  <Button variant="secondary" size="lg" className="rounded-full px-8 h-14 text-lg text-[var(--primary)] hover:scale-110 hover:shadow-2xl transition-all duration-300">
-                    {t.landing.heroCta}
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <div className="h-full min-h-[400px] md:min-h-full relative bg-black/20 overflow-hidden">
+        <div className="flex flex-col lg:flex-row gap-16 lg:gap-12 items-center">
+          {/* Left: Image & Floating Cards */}
+          <div className="w-full lg:w-1/2 relative">
+            <div className="relative h-[450px] md:h-[600px] rounded-[3rem] overflow-hidden shadow-2xl group">
               <Image
                 src="/images/farm.png"
                 alt="Tentang Kami"
                 fill
-                className="object-cover opacity-90 group-hover:scale-125 group-hover:rotate-2 transition-transform duration-1000 ease-in-out"
+                className="object-cover group-hover:scale-110 transition-transform duration-1000"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary)] to-transparent opacity-80 md:opacity-50"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--primary)]/80 via-transparent to-transparent opacity-60"></div>
+            </div>
+            
+            {/* Floating Glassmorphism Card 1 */}
+            <div className="absolute -bottom-8 -right-4 md:-right-8 bg-white/70 dark:bg-black/60 backdrop-blur-xl border border-white/20 dark:border-white/10 p-6 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] max-w-[240px] animate-float">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-[var(--accent)] rounded-2xl flex items-center justify-center text-white font-extrabold text-2xl shadow-lg shrink-0">
+                  15+
+                </div>
+                <div>
+                  <h4 className="text-[var(--text-primary)] font-bold leading-tight">{locale === 'id' ? 'Tahun Pengalaman' : 'Years Experience'}</h4>
+                  <p className="text-[var(--text-tertiary)] text-xs mt-1">{locale === 'id' ? 'Di industri pertanian ubi.' : 'In sweet potato farming.'}</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Secondary Floating Card */}
+            <div className="absolute top-12 -left-4 md:-left-8 bg-white/70 dark:bg-black/60 backdrop-blur-xl border border-white/20 dark:border-white/10 p-6 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] max-w-[240px] animate-float [animation-delay:2s]">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-[var(--primary)] rounded-2xl flex items-center justify-center text-white shadow-lg shrink-0">
+                  <ShieldCheck className="w-7 h-7" />
+                </div>
+                <div>
+                  <h4 className="text-[var(--text-primary)] font-bold leading-tight">{locale === 'id' ? 'Kualitas Terjamin' : 'Quality Assured'}</h4>
+                  <p className="text-[var(--text-tertiary)] text-xs mt-1">{locale === 'id' ? '100% Produk organik terbaik.' : '100% Best organic products.'}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Detailed Content */}
+          <div className="w-full lg:w-1/2 space-y-8 lg:pl-10">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] font-bold text-sm shadow-sm border border-[var(--primary)]/20 animate-fade-in-up">
+              <Users className="w-4 h-4" />
+              {locale === 'id' ? 'Mengenal Kami Lebih Dekat' : 'Getting to Know Us'}
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] leading-tight">
+              {t.landing.aboutTitle}
+            </h2>
+            
+            <div className="space-y-6 text-lg text-[var(--text-secondary)] leading-relaxed">
+              <p>
+                {t.landing.aboutDesc}
+              </p>
+              <p className="font-medium text-[var(--text-primary)] border-l-4 border-[var(--primary)] pl-6 py-2 italic bg-[var(--bg-tertiary)] rounded-r-2xl">
+                {locale === 'id' 
+                  ? '"Berdiri sejak tahun 2010, STM Farm bermula dari lahan kecil yang kini berkembang menjadi pemasok ubi terpercaya. Kualitas adalah prioritas utama kami."' 
+                  : '"Established in 2010, STM Farm started from a small land and has grown into a trusted sweet potato supplier. Quality is our main priority."'}
+              </p>
+            </div>
+            
+            <div className="grid sm:grid-cols-2 gap-x-6 gap-y-8 pt-6">
+              {[
+                { icon: Leaf, title: locale === 'id' ? 'Ramah Lingkungan' : 'Eco-Friendly', desc: locale === 'id' ? 'Praktik pertanian yang menjaga kelestarian alam.' : 'Farming practices that preserve nature.' },
+                { icon: Users, title: locale === 'id' ? 'Petani Lokal' : 'Local Farmers', desc: locale === 'id' ? 'Memberdayakan komunitas di sekitar area kami.' : 'Empowering communities around our area.' },
+                { icon: Truck, title: locale === 'id' ? 'Distribusi Cepat' : 'Fast Distribution', desc: locale === 'id' ? 'Armada kami menjamin barang tiba tepat waktu.' : 'Our fleet ensures goods arrive on time.' },
+                { icon: ShieldCheck, title: locale === 'id' ? 'Standar Tinggi' : 'High Standards', desc: locale === 'id' ? 'Melewati proses Quality Control yang ketat.' : 'Passing strict Quality Control processes.' },
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-4 items-start group">
+                  <div className="w-14 h-14 rounded-2xl bg-[var(--bg-tertiary)] flex items-center justify-center shrink-0 group-hover:bg-[var(--primary)] group-hover:text-white transition-all duration-300 shadow-sm border border-[var(--border-light)] text-[var(--primary)] group-hover:scale-110 group-hover:-rotate-3">
+                    <item.icon className="w-6 h-6" />
+                  </div>
+                  <div className="pt-1">
+                    <h4 className="font-bold text-[var(--text-primary)] group-hover:text-[var(--primary)] transition-colors">{item.title}</h4>
+                    <p className="text-sm text-[var(--text-secondary)] mt-1.5 leading-snug">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-10">
+              <Link href="#kontak">
+                <Button size="lg" className="rounded-full px-10 h-16 text-lg font-bold hover:scale-105 shadow-xl shadow-[var(--primary)]/20 transition-all duration-300 gap-3 group">
+                  {locale === 'id' ? 'Mari Bekerja Sama' : 'Let\'s Work Together'}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
