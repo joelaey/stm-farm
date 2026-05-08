@@ -242,8 +242,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
               </button>
               <button 
                 onClick={confirmState.onConfirm}
-                className={`px-4 py-2 text-white rounded-lg text-sm transition-all font-medium shadow-sm hover:shadow-md ${confirmState.message.includes('menghapus') ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
-                style={{ backgroundColor: confirmState.message.includes('menghapus') ? '#dc2626' : '#16a34a' }}
+                className="px-4 py-2 text-white rounded-lg text-sm transition-all font-medium shadow-sm hover:shadow-md bg-green-600 hover:bg-green-700"
+                style={{ backgroundColor: '#16a34a' }}
               >
                 Ya, Lanjutkan
               </button>
