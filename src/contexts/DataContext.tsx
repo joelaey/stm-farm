@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import {
   PenjualanEntry, PembelianEntry, StokEntry,
   OperasionalEntry, PengeluaranEntry,
@@ -141,37 +142,52 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Generic fetcher
-  const apiCall = async (url: string, method: string, body?: any) => {
+  const apiCall = async (url: string, method: string, body?: any, successMessage?: string) => {
     try {
-      await fetch(url, {
+      const res = await fetch(url, {
         method,
         headers: body ? { 'Content-Type': 'application/json' } : undefined,
         body: body ? JSON.stringify(body) : undefined
       });
+      if (!res.ok) throw new Error('Respons server gagal');
+      if (successMessage) toast.success(successMessage);
       refreshData();
-    } catch(e) {
+      return true;
+    } catch(e: any) {
+      toast.error(e.message || 'Terjadi kesalahan sistem');
       console.error(e);
+      return false;
+    }
+  };
+
+  const withConfirm = async (action: 'add' | 'delete', fn: () => Promise<any>) => {
+    const message = action === 'add' 
+      ? 'Apakah Anda yakin ingin menyimpan data ini?' 
+      : 'Apakah Anda yakin ingin menghapus data ini? Aksi ini tidak dapat dibatalkan.';
+    
+    if (window.confirm(message)) {
+      await fn();
     }
   };
 
   // CRUD wrappers
-  const addPembelian = (data: PembelianEntry) => apiCall('/api/pembelian', 'POST', data);
+  const addPembelian = (data: PembelianEntry) => withConfirm('add', () => apiCall('/api/pembelian', 'POST', data, 'Pembelian berhasil ditambahkan!'));
   const updatePembelian = (id: string, data: Partial<PembelianEntry>) => {}; // not fully implemented on backend yet
-  const deletePembelian = (id: string) => apiCall(`/api/pembelian/${id}`, 'DELETE');
+  const deletePembelian = (id: string) => withConfirm('delete', () => apiCall(`/api/pembelian/${id}`, 'DELETE', undefined, 'Pembelian berhasil dihapus!'));
   
-  const addPenjualan = (data: PenjualanEntry) => apiCall('/api/penjualan', 'POST', data);
+  const addPenjualan = (data: PenjualanEntry) => withConfirm('add', () => apiCall('/api/penjualan', 'POST', data, 'Penjualan berhasil ditambahkan!'));
   const updatePenjualan = (id: string, data: Partial<PenjualanEntry>) => {}; 
-  const deletePenjualan = (id: string) => apiCall(`/api/penjualan/${id}`, 'DELETE');
+  const deletePenjualan = (id: string) => withConfirm('delete', () => apiCall(`/api/penjualan/${id}`, 'DELETE', undefined, 'Penjualan berhasil dihapus!'));
   
-  const addStok = (data: StokEntry) => apiCall('/api/stok', 'POST', data);
+  const addStok = (data: StokEntry) => withConfirm('add', () => apiCall('/api/stok', 'POST', data, 'Stok berhasil ditambahkan!'));
   const updateStok = (id: string, data: Partial<StokEntry>) => {}; 
-  const deleteStok = (id: string) => apiCall(`/api/stok/${id}`, 'DELETE');
+  const deleteStok = (id: string) => withConfirm('delete', () => apiCall(`/api/stok/${id}`, 'DELETE', undefined, 'Stok berhasil dihapus!'));
   
-  const addOperasional = (data: OperasionalEntry) => apiCall('/api/operasional', 'POST', data);
-  const deleteOperasional = (id: string) => apiCall(`/api/operasional/${id}`, 'DELETE');
+  const addOperasional = (data: OperasionalEntry) => withConfirm('add', () => apiCall('/api/operasional', 'POST', data, 'Data operasional ditambahkan!'));
+  const deleteOperasional = (id: string) => withConfirm('delete', () => apiCall(`/api/operasional/${id}`, 'DELETE', undefined, 'Data operasional dihapus!'));
   
-  const addPengeluaran = (data: PengeluaranEntry) => apiCall('/api/pengeluaran', 'POST', data);
-  const deletePengeluaran = (id: string) => apiCall(`/api/pengeluaran/${id}`, 'DELETE');
+  const addPengeluaran = (data: PengeluaranEntry) => withConfirm('add', () => apiCall('/api/pengeluaran', 'POST', data, 'Pengeluaran lainnya ditambahkan!'));
+  const deletePengeluaran = (id: string) => withConfirm('delete', () => apiCall(`/api/pengeluaran/${id}`, 'DELETE', undefined, 'Pengeluaran lainnya dihapus!'));
 
   return (
     <DataContext.Provider value={{
