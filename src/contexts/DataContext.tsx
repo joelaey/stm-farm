@@ -226,8 +226,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       
       {/* Global Confirm Modal */}
       {confirmState.isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 min-w-[300px] max-w-sm m-4 transform transition-all border border-slate-200 dark:border-slate-700 animate-in fade-in zoom-in duration-200">
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-sm transition-opacity"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.55)' }}
+        >
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 min-w-[300px] max-w-sm m-4 transform transition-all border border-slate-200 dark:border-slate-700">
             <h3 className="text-lg font-bold mb-3 text-slate-800 dark:text-slate-100">Konfirmasi</h3>
             <p className="mb-6 text-slate-600 dark:text-slate-300 text-sm leading-relaxed">{confirmState.message}</p>
             <div className="flex gap-3 justify-end mt-2">
@@ -240,6 +243,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
               <button 
                 onClick={confirmState.onConfirm}
                 className={`px-4 py-2 text-white rounded-lg text-sm transition-all font-medium shadow-sm hover:shadow-md ${confirmState.message.includes('menghapus') ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'}`}
+                style={{ backgroundColor: confirmState.message.includes('menghapus') ? '#dc2626' : '#16a34a' }}
               >
                 Ya, Lanjutkan
               </button>
