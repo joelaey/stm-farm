@@ -34,9 +34,10 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-[var(--text-primary)] mb-4">{t.landing.footerContact}</h4>
             <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
-              <li>Sumedang, Jawa Barat, Indonesia</li>
-              <li>halo@fafarm.id</li>
-              <li>+62 812 3456 7890</li>
+              <li>stmfarmoffice@gmail.com</li>
+              <li>+62 899 7777 592</li>
+              <li className="pt-2">IG: @stmfarm.co</li>
+              <li>TikTok: @stmfarm.co</li>
             </ul>
           </div>
         </div>

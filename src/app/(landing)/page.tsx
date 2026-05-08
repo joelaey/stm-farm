@@ -279,7 +279,7 @@ export default function LandingPage() {
 
           <h2 className="text-4xl md:text-6xl font-extrabold text-[var(--text-primary)] relative z-10 group-hover:scale-105 transition-transform duration-500">{t.landing.ctaTitle}</h2>
           <p className="text-xl md:text-2xl text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed relative z-10">{t.landing.ctaDesc}</p>
-          <Button size="lg" className="h-16 px-10 text-xl rounded-full shadow-2xl hover:scale-110 hover:shadow-[0_0_40px_rgba(22,101,52,0.4)] transition-all duration-300 gap-3 relative z-10" onClick={() => window.open('https://wa.me/6281234567890', '_blank')}>
+          <Button size="lg" className="h-16 px-10 text-xl rounded-full shadow-2xl hover:scale-110 hover:shadow-[0_0_40px_rgba(22,101,52,0.4)] transition-all duration-300 gap-3 relative z-10" onClick={() => window.open('https://wa.me/628997777592', '_blank')}>
             {t.landing.ctaButton}
             <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
           </Button>

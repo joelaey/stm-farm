@@ -108,7 +108,7 @@ export default function ProdukPage() {
               : 'Get special prices for bulk purchases. Contact our team for more information.'}
           </p>
           <div className="pt-4 relative z-10">
-            <Button variant="secondary" size="lg" className="rounded-full px-8 gap-2 group" onClick={() => window.open('https://wa.me/6281234567890', '_blank')}>
+            <Button variant="secondary" size="lg" className="rounded-full px-8 gap-2 group" onClick={() => window.open('https://wa.me/628997777592', '_blank')}>
               {locale === 'id' ? 'Hubungi Kami' : 'Contact Us'}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
