@@ -4,7 +4,7 @@ import React from 'react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
-import { ArrowRight, Leaf, Truck, Users, ShieldCheck, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Leaf, Truck, Users, ShieldCheck, ShoppingBag, Cookie, Handshake, Tractor } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -79,27 +79,45 @@ export default function LandingPage() {
       </section>
 
       {/* Services Section */}
-      <section id="layanan" className="container space-y-16 scroll-mt-32">
-        <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] hover:scale-105 transition-transform duration-300">{t.landing.servicesTitle}</h2>
-          <p className="text-lg text-[var(--text-secondary)]">{t.landing.aboutVision}</p>
+      <section id="layanan" className="container space-y-16 scroll-mt-32 relative">
+        {/* Decorative background blur */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[80%] max-w-[1000px] bg-[var(--primary)]/5 rounded-[100%] blur-[120px] pointer-events-none -z-10" />
+
+        <div className="text-center space-y-6 max-w-3xl mx-auto relative z-10">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] font-bold text-sm shadow-sm border border-[var(--accent)]/20">
+            {locale === 'id' ? 'Layanan Unggulan' : 'Premium Services'}
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[var(--text-primary)] hover:scale-105 transition-transform duration-500 tracking-tight">
+            {t.landing.servicesTitle}
+          </h2>
+          <p className="text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed">
+            {t.landing.aboutVision}
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
-            { icon: Users, title: t.landing.serviceRetail, desc: t.landing.serviceRetailDesc, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-900/40' },
-            { icon: Truck, title: t.landing.serviceSupply, desc: t.landing.serviceSupplyDesc, color: 'text-green-600 dark:text-green-400', bg: 'bg-green-100 dark:bg-green-900/40' },
-            { icon: ShieldCheck, title: t.landing.serviceCorporate, desc: t.landing.serviceCorporateDesc, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-100 dark:bg-amber-900/40' },
-            { icon: Leaf, title: t.landing.serviceExport, desc: t.landing.serviceExportDesc, color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-100 dark:bg-purple-900/40' },
+            { icon: Users, title: t.landing.serviceRetail, desc: t.landing.serviceRetailDesc, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-900/40', border: 'hover:border-blue-500/50' },
+            { icon: Truck, title: t.landing.serviceSupply, desc: t.landing.serviceSupplyDesc, color: 'text-green-600 dark:text-green-400', bg: 'bg-green-100 dark:bg-green-900/40', border: 'hover:border-green-500/50' },
+            { icon: ShieldCheck, title: t.landing.serviceCorporate, desc: t.landing.serviceCorporateDesc, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-100 dark:bg-amber-900/40', border: 'hover:border-amber-500/50' },
+            { icon: Leaf, title: t.landing.serviceExport, desc: t.landing.serviceExportDesc, color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-100 dark:bg-purple-900/40', border: 'hover:border-purple-500/50' },
+            { icon: Cookie, title: locale === 'id' ? 'Produk Olahan Ubi' : 'Processed Products', desc: locale === 'id' ? 'Menyediakan hasil olahan ubi premium berupa pasta ubi, pia ubi, dan produk turunan lainnya yang lezat.' : 'Providing premium processed sweet potato products like paste, pastries, and other delicious derivatives.', color: 'text-orange-600 dark:text-orange-400', bg: 'bg-orange-100 dark:bg-orange-900/40', border: 'hover:border-orange-500/50' },
+            { icon: Handshake, title: locale === 'id' ? 'Kemitraan Petani' : 'Farmer Partnership', desc: locale === 'id' ? 'Membangun kerja sama yang kuat dan saling menguntungkan dengan para petani lokal untuk menjaga kualitas.' : 'Building strong, mutually beneficial cooperation with local farmers to maintain quality.', color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-100 dark:bg-teal-900/40', border: 'hover:border-teal-500/50' },
+            { icon: Tractor, title: locale === 'id' ? 'Sarana Prasarana' : 'Agri-Infrastructure', desc: locale === 'id' ? 'Penyediaan bibit, pupuk, alat pertanian, dan fasilitas penunjang lainnya untuk ekosistem pertanian yang sehat.' : 'Provision of seeds, fertilizers, agricultural tools, and other supporting facilities for a healthy ecosystem.', color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-100 dark:bg-rose-900/40', border: 'hover:border-rose-500/50' },
           ].map((service, i) => (
-            <Card key={i} className="border border-[var(--border-light)] shadow-sm hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 bg-[var(--bg-secondary)] rounded-3xl overflow-hidden group">
-              <CardContent className="p-8 space-y-6 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--bg-tertiary)] rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-150"></div>
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${service.bg} group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 relative z-10`}>
+            <Card key={i} className={`border border-[var(--border-light)] ${service.border} shadow-sm hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 bg-[var(--bg-secondary)] rounded-[2.5rem] overflow-hidden group ${i === 6 ? 'lg:col-start-2' : ''}`}>
+              <CardContent className="p-8 md:p-10 space-y-6 relative overflow-hidden h-full">
+                {/* Decorative blob corner */}
+                <div className={`absolute -top-16 -right-16 w-40 h-40 ${service.bg} opacity-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`}></div>
+                
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${service.bg} group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 relative z-10 shadow-inner`}>
                   <service.icon className={`w-8 h-8 ${service.color}`} />
                 </div>
-                <h3 className="text-2xl font-bold text-[var(--text-primary)] relative z-10">{service.title}</h3>
-                <p className="text-[var(--text-secondary)] leading-relaxed relative z-10">{service.desc}</p>
+                
+                <div className="relative z-10 space-y-3">
+                  <h3 className="text-2xl font-bold text-[var(--text-primary)] group-hover:text-[var(--primary)] transition-colors">{service.title}</h3>
+                  <p className="text-[var(--text-secondary)] leading-relaxed">{service.desc}</p>
+                </div>
               </CardContent>
             </Card>
           ))}
