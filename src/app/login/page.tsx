@@ -33,6 +33,7 @@ export default function LoginPage() {
 
       const user = await res.json();
       localStorage.setItem('user_role', user.role);
+      localStorage.setItem('auth_user', JSON.stringify(user));
       
       if (user.role === 'admin') {
         router.push('/dashboard');
