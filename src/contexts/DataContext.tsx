@@ -37,6 +37,7 @@ interface DataContextType {
   addPengeluaran: (data: PengeluaranEntry) => void;
   updatePengeluaran: (id: string, data: Partial<PengeluaranEntry>) => void;
   deletePengeluaran: (id: string) => void;
+  withConfirm: (action: 'add' | 'delete' | 'edit', fn: () => Promise<any> | void, customMessage?: string) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -144,9 +145,19 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Generic fetcher
-  const apiCall = async (url: string, method: string, body?: any, successMessage?: string) => {
+  const [confirmState, setConfirmState] = useState<{
+    isOpen: boolean;
+    message: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    message: '',
+    onConfirm: () => {}
+  });
+
+  const apiCall = async (endpoint: string, method: string, body?: any, successMessage?: string) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(endpoint, {
         method,
         headers: body ? { 'Content-Type': 'application/json' } : undefined,
         body: body ? JSON.stringify(body) : undefined
@@ -162,33 +173,21 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const withConfirm = (action: 'add' | 'delete' | 'edit', fn: () => Promise<any>) => {
-    const message = action === 'delete' 
-      ? 'Apakah Anda yakin ingin menghapus data ini? Aksi ini tidak dapat dibatalkan.' 
-      : action === 'edit' ? 'Apakah Anda yakin ingin menyimpan perubahan data ini?' : 'Apakah Anda yakin ingin menyimpan data baru ini?';
+  const withConfirm = (action: 'add' | 'delete' | 'edit', fn: () => Promise<any> | void, customMessage?: string) => {
+    const message = customMessage || (
+      action === 'delete' 
+        ? 'Apakah Anda yakin ingin menghapus data ini? Aksi ini tidak dapat dibatalkan.' 
+        : action === 'edit' ? 'Apakah Anda yakin ingin menyimpan perubahan data ini?' : 'Apakah Anda yakin ingin menyimpan data baru ini?'
+    );
 
-    toast((t) => (
-      <div className="flex flex-col gap-3 min-w-[250px]">
-        <p className="font-medium text-slate-800 dark:text-slate-100 leading-snug">{message}</p>
-        <div className="flex gap-2 justify-end mt-2">
-          <button 
-            onClick={() => toast.dismiss(t.id)} 
-            className="px-4 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-lg text-sm transition-colors text-slate-800 dark:text-slate-200 font-medium"
-          >
-            Batal
-          </button>
-          <button 
-            onClick={() => {
-              toast.dismiss(t.id);
-              fn();
-            }} 
-            className={`px-4 py-1.5 text-white rounded-lg text-sm transition-colors font-medium shadow-sm ${action === 'delete' ? 'bg-red-600 hover:bg-red-700' : 'bg-[var(--primary)] hover:brightness-90'}`}
-          >
-            Ya, Lanjutkan
-          </button>
-        </div>
-      </div>
-    ), { duration: Infinity, position: 'top-center' });
+    setConfirmState({
+      isOpen: true,
+      message,
+      onConfirm: async () => {
+        setConfirmState(prev => ({ ...prev, isOpen: false }));
+        await fn();
+      }
+    });
   };
 
   // CRUD wrappers
@@ -220,9 +219,34 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       addPenjualan, updatePenjualan, deletePenjualan,
       addStok, updateStok, deleteStok, recomputeStok,
       addOperasional, updateOperasional, deleteOperasional,
-      addPengeluaran, updatePengeluaran, deletePengeluaran
+      addPengeluaran, updatePengeluaran, deletePengeluaran,
+      withConfirm
     }}>
       {children}
+      
+      {/* Global Confirm Modal */}
+      {confirmState.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 min-w-[300px] max-w-sm m-4 transform transition-all border border-slate-200 dark:border-slate-700 animate-in fade-in zoom-in duration-200">
+            <h3 className="text-lg font-bold mb-3 text-slate-800 dark:text-slate-100">Konfirmasi</h3>
+            <p className="mb-6 text-slate-600 dark:text-slate-300 text-sm leading-relaxed">{confirmState.message}</p>
+            <div className="flex gap-3 justify-end mt-2">
+              <button 
+                onClick={() => setConfirmState(prev => ({ ...prev, isOpen: false }))} 
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded-lg text-sm transition-colors text-slate-800 dark:text-slate-200 font-medium"
+              >
+                Batal
+              </button>
+              <button 
+                onClick={confirmState.onConfirm}
+                className={`px-4 py-2 text-white rounded-lg text-sm transition-all font-medium shadow-sm hover:shadow-md hover:brightness-90 ${confirmState.message.includes('menghapus') ? 'bg-red-600' : 'bg-[var(--primary)]'}`}
+              >
+                Ya, Lanjutkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </DataContext.Provider>
   );
 }

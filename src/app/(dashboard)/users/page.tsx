@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Plus, User, UserPlus, Shield, Briefcase, Trash2 } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
+import { useData } from '@/contexts/DataContext';
 
 interface UserData {
   id: string;
@@ -29,6 +30,8 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
+  const { withConfirm } = useData();
+
   const fetchUsers = async () => {
     const res = await fetch('/api/users');
     if (res.ok) {
@@ -39,30 +42,32 @@ export default function UsersPage() {
 
   const handleAddUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
+    withConfirm('add', async () => {
+      const res = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      
+      if (res.ok) {
+        fetchUsers();
+        setIsModalOpen(false);
+        setFormData({ name: '', username: '', password: '', role: 'pekerja_lapangan' });
+      } else {
+        alert('Gagal menambahkan user');
+      }
     });
-    
-    if (res.ok) {
-      fetchUsers();
-      setIsModalOpen(false);
-      setFormData({ name: '', username: '', password: '', role: 'pekerja_lapangan' });
-    } else {
-      alert('Gagal menambahkan user');
-    }
   };
 
   const handleDeleteUser = async (id: string) => {
-    if (confirm('Apakah Anda yakin ingin menghapus user ini?')) {
+    withConfirm('delete', async () => {
       const res = await fetch(`/api/users/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setUsers(users.filter(u => u.id !== id));
       } else {
         alert('Gagal menghapus user');
       }
-    }
+    });
   };
 
   return (
