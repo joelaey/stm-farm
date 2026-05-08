@@ -1,0 +1,328 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light Mode Colors (Earthy/Agriculture Theme) */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  
+  /* Primary: Green */
+  --primary: #166534; /* Green 800 */
+  --primary-hover: #15803d; /* Green 700 */
+  --primary-light: #dcfce7;
+  
+  /* Accent: Earthy Brown/Orange */
+  --accent: #d97706; /* Amber 600 */
+  --accent-hover: #b45309;
+  
+  /* Status Colors */
+  --success: #16a34a;
+  --warning: #eab308;
+  --danger: #ef4444;
+  --info: #3b82f6;
+
+  /* Borders */
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.dark {
+  /* Dark Mode Colors */
+  --bg-primary: #0f172a; /* Slate 900 */
+  --bg-secondary: #1e293b; /* Slate 800 */
+  --bg-tertiary: #334155; /* Slate 700 */
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  
+  /* Primary: Green (adjusted for dark mode) */
+  --primary: #22c55e; /* Green 500 */
+  --primary-hover: #16a34a; /* Green 600 */
+  --primary-light: #14532d; /* Green 900 */
+  
+  /* Accent */
+  --accent: #f59e0b; /* Amber 500 */
+  --accent-hover: #d97706;
+  
+  /* Borders */
+  --border-light: #334155;
+  --border-medium: #475569;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.bg-primary { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }
+
+/* ============================================
+   Spreadsheet Table Styles
+   ============================================ */
+.spreadsheet-wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+}
+
+.spreadsheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  white-space: nowrap;
+  min-width: 1400px;
+}
+
+.spreadsheet-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Header row styling */
+.spreadsheet-table thead tr {
+  background: var(--bg-tertiary);
+}
+
+.spreadsheet-table thead th {
+  padding: 6px 8px;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Group header (Kg, Rp) */
+.spreadsheet-table thead th.group-header {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+/* Body styling */
+.spreadsheet-table tbody td {
+  padding: 5px 8px;
+  border: 1px solid var(--border-light);
+  text-align: center;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.spreadsheet-table tbody tr {
+  background: var(--bg-secondary);
+  transition: background-color 0.15s ease;
+}
+
+.spreadsheet-table tbody tr:hover {
+  background: var(--bg-primary);
+}
+
+/* Alternating subtle bg */
+.spreadsheet-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--bg-tertiary) 30%, var(--bg-secondary));
+}
+
+.spreadsheet-table tbody tr:nth-child(even):hover {
+  background: var(--bg-primary);
+}
+
+/* Sticky columns: tanggal & keterangan */
+.spreadsheet-table .sticky-col {
+  position: sticky;
+  z-index: 5;
+  background: inherit;
+}
+
+.spreadsheet-table .sticky-col-0 {
+  left: 0;
+  min-width: 60px;
+}
+
+.spreadsheet-table .sticky-col-1 {
+  left: 60px;
+  min-width: 120px;
+}
+
+.spreadsheet-table thead .sticky-col {
+  z-index: 15;
+  background: var(--bg-tertiary);
+}
+
+/* Text alignment overrides */
+.spreadsheet-table .text-left {
+  text-align: left;
+}
+
+.spreadsheet-table .text-right {
+  text-align: right;
+}
+
+/* Number cells */
+.spreadsheet-table .cell-kg {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.spreadsheet-table .cell-rp {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.spreadsheet-table .cell-empty {
+  color: var(--text-tertiary);
+  opacity: 0.4;
+}
+
+/* Jumlah/Debit/Kredit columns */
+.spreadsheet-table .cell-jumlah {
+  font-weight: 600;
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--primary-light) 30%, transparent);
+}
+
+.spreadsheet-table .cell-debit {
+  font-weight: 600;
+  color: var(--success);
+}
+
+.spreadsheet-table .cell-kredit {
+  font-weight: 600;
+  color: var(--danger);
+}
+
+/* Footer / Total Row */
+.spreadsheet-table tfoot td {
+  padding: 8px;
+  border: 1px solid var(--border-light);
+  font-weight: 700;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.spreadsheet-table tfoot td.total-label {
+  text-align: left;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+}
+
+/* Month group separator */
+.spreadsheet-table .month-row td {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 12px;
+}
+
+/* Action buttons in table */
+.spreadsheet-table .cell-action {
+  padding: 2px 4px;
+}
+
+.spreadsheet-table .cell-action button {
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.spreadsheet-table .cell-action button:hover {
+  background: color-mix(in srgb, var(--danger) 15%, transparent);
+}
+
+/* Add entry form grid */
+.form-grid-ubi {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr;
+  gap: 6px;
+  align-items: center;
+}
+
+.form-grid-ubi .category-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+  padding: 6px 4px;
+  background: var(--bg-tertiary);
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* Responsive: scroll indicator */
+.spreadsheet-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(to right, transparent, color-mix(in srgb, var(--bg-secondary) 60%, transparent));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.spreadsheet-wrapper.can-scroll::after {
+  opacity: 1;
+}

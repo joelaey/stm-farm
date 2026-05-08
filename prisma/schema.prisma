@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  username  String   @unique
+  password  String
+  role      String   @default("pekerja_lapangan") // admin, pekerja_lapangan
+  createdAt DateTime @default(now())
+}
+
+model Pembelian {
+  id         String   @id @default(uuid())
+  tanggal    String
+  bulan      String
+  tanggalNum Int
+  keterangan String
+  nomorNota  String?
+  jumlah     Float
+  debit      Float
+  kredit     Float
+  createdAt  DateTime @default(now())
+  
+  // Simpan detail item ubi sebagai JSON untuk fleksibilitas
+  items      Json
+}
+
+model Penjualan {
+  id         String   @id @default(uuid())
+  tanggal    String
+  bulan      String
+  tanggalNum Int
+  keterangan String
+  nomorNota  String?
+  jumlah     Float
+  debit      Float
+  kredit     Float
+  createdAt  DateTime @default(now())
+  
+  items      Json
+}
+
+model Stok {
+  id               String   @id @default(uuid())
+  tanggal          String
+  bulan            String
+  tanggalNum       Int
+  keterangan       String
+  jumlah           Float
+  debit            Float
+  kredit           Float
+  isManualOverride Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  
+  items            Json
+}
+
+model Operasional {
+  id         String   @id @default(uuid())
+  tanggal    String
+  bulan      String
+  tanggalNum Int
+  keterangan String
+  jumlah     Float
+  createdAt  DateTime @default(now())
+  
+  items      Json
+}
+
+model Pengeluaran {
+  id         String   @id @default(uuid())
+  tanggal    String?
+  keterangan String
+  uraian     String?
+  harga      Float?
+  jumlah     Float
+  createdAt  DateTime @default(now())
+}
